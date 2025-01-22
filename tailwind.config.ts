@@ -1,14 +1,31 @@
+/**
+ * Tailwind CSS Configuration
+ *
+ * This configuration file defines custom settings for Tailwind CSS including:
+ * - Dark mode class-based activation
+ * - Extended color system with CSS variable support
+ * - Custom animations and keyframes
+ * - SVG pattern utilities for background effects
+ * - Integration with Radix UI animations
+ */
+
 import type { Config } from "tailwindcss";
 
+// Utility to convert SVG strings to data URIs
 const svgToDataUri = require("mini-svg-data-uri");
 
+// Color utilities for Tailwind
 const colors = require("tailwindcss/colors");
 const {
   default: flattenColorPalette,
 } = require("tailwindcss/lib/util/flattenColorPalette");
 
+// Main configuration object
 const config = {
+  // Dark mode configuration using class-based activation
   darkMode: ["class"],
+
+  // Content sources configuration
   content: [
     "./pages/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
@@ -17,6 +34,8 @@ const config = {
     "./data/**/*.{ts,tsx}",
   ],
   prefix: "",
+
+  // Theme extensions
   theme: {
     container: {
       center: true,
@@ -26,6 +45,7 @@ const config = {
       },
     },
     extend: {
+      // Custom color palette with CSS variable integration
       colors: {
         black: {
           DEFAULT: "#000",
@@ -76,11 +96,15 @@ const config = {
           foreground: "hsl(var(--card-foreground))",
         },
       },
+
+      // Border radius configuration
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+
+      // Animation keyframes
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
@@ -147,6 +171,8 @@ const config = {
           },
         },
       },
+
+      // Animation implementations
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
@@ -162,9 +188,16 @@ const config = {
       },
     },
   },
+
+  // Plugin configurations
   plugins: [
+    // Official Tailwind animations plugin
     require("tailwindcss-animate"),
+
+    // Custom plugin for CSS variable support
     addVariablesForColors,
+
+    // SVG pattern utilities
     function ({ matchUtilities, theme }: any) {
       matchUtilities(
         {
@@ -190,6 +223,10 @@ const config = {
   ],
 } satisfies Config;
 
+/**
+ * Helper function for CSS variable support
+ * Creates CSS variables for all colors in the theme
+ */
 function addVariablesForColors({ addBase, theme }: any) {
   let allColors = flattenColorPalette(theme("colors"));
   let newVars = Object.fromEntries(
